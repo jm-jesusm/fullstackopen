@@ -6,15 +6,23 @@ const Stadistics = ({good, bad, neutral}) => {
   const total = good+neutral+bad
 
   return (
-    <div>
-      <h1>stadistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {total}</p>
-      <p>average {(good-bad)/total || 0}</p>
-      <p>positive {good/total*100 || 0}%</p>
-    </div>
+    
+      <div>
+        <h1>stadistics</h1>
+        {
+          (good === 0 && bad === 0 && neutral === 0) ?
+            <p>No feedback given</p>
+          :
+            <>
+              <p>good {good}</p>
+              <p>neutral {neutral}</p>
+              <p>bad {bad}</p>
+              <p>all {total}</p>
+              <p>average {(good-bad)/total || 0}</p>
+              <p>positive {good/total*100 || 0}%</p>
+            </>
+        }
+      </div>
   )
 }
 
@@ -36,7 +44,7 @@ const App = () => {
         <button onClick={handleNeutral}>neutral</button>
         <button onClick={handleBad}>bad</button>
       </div>
-      <Stadistics good={good} neutral={neutral} bad={good}/>
+      <Stadistics good={good} neutral={neutral} bad={bad}/>
     </>
   )
 }
