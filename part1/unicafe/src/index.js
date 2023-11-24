@@ -14,17 +14,20 @@ const Stadistics = ({good, bad, neutral}) => {
             <p>No feedback given</p>
           :
             <>
-              <p>good {good}</p>
-              <p>neutral {neutral}</p>
-              <p>bad {bad}</p>
-              <p>all {total}</p>
-              <p>average {(good-bad)/total || 0}</p>
-              <p>positive {good/total*100 || 0}%</p>
+              <StadisticLine text="good" value={good} />
+              <StadisticLine text="neutral" value={neutral} />
+              <StadisticLine text="bad" value={bad} />
+              <StadisticLine text="all" value={total} />
+              <StadisticLine text="average" value={(good-bad)/total} />
+              <StadisticLine text="positive" value={`${good/total*100} %`} />
             </>
         }
       </div>
   )
 }
+
+const StadisticLine = ({text, value}) => <p>{text} {value}</p>
+
 
 const App = () => {
   // save clicks of each button to its own state
