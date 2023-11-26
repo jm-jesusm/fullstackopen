@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 const Button = ({text, handleClick}) => (
   <button onClick={handleClick}>{text}</button>
@@ -63,6 +63,5 @@ const App = () => {
   )
 }
 
-ReactDOM.render(<App />, 
-  document.getElementById('root')
-)
+const root = createRoot(document.getElementById('root'))
+root.render(<App />)
