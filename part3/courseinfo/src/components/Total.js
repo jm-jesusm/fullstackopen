@@ -2,11 +2,7 @@ import React from 'react'
 
 const Total = ({parts}) => {
 
-  let total = 0
-
-  parts.forEach(({exercises}) => {
-    total+=exercises
-  });
+  const total = parts.reduce((buffer, {exercises: current}) => buffer+current, 0)
   
   return (
     <strong>total of exercises {total}</strong>
