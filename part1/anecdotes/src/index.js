@@ -3,6 +3,13 @@ import { createRoot } from 'react-dom/client';
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Array(props.anecdotes.length).fill(0))
+
+  const handleVote = () => {
+    const copy = [...votes]
+    copy[selected]++
+    setVotes(copy)
+  }
 
   const handleNext = () => {
     const randomNumber = Math.floor(Math.random() * props.anecdotes.length)
@@ -12,6 +19,8 @@ const App = (props) => {
   return (
     <div>
       <p>{props.anecdotes[selected]}</p>
+      <p>has {votes[selected]}</p>
+      <button onClick={handleVote}>vote</button>
       <button onClick={handleNext}>next anecdote</button>
     </div>
   )
