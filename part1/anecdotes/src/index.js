@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client';
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Array(props.anecdotes.length).fill(0))
+  const [mostVoted, setMostVoted] = useState({})
+
+  useEffect(() => {
+    const highestVote = Math.max(...votes);
+    const highestVoteIndex = votes.indexOf(highestVote)
+    const anecdote = props.anecdotes[highestVoteIndex]
+    setMostVoted({anecdote, votes: highestVote})
+  }, [votes])
 
   const handleVote = () => {
     const copy = [...votes]
@@ -17,12 +25,20 @@ const App = (props) => {
   } 
 
   return (
-    <div>
-      <p>{props.anecdotes[selected]}</p>
-      <p>has {votes[selected]}</p>
-      <button onClick={handleVote}>vote</button>
-      <button onClick={handleNext}>next anecdote</button>
-    </div>
+    <>
+      <div>
+        <h1>Anecdote of the day</h1>
+        <p>{props.anecdotes[selected]}</p>
+        <p>has {votes[selected]} votes</p>
+        <button onClick={handleVote}>vote</button>
+        <button onClick={handleNext}>next anecdote</button>
+      </div>
+      <div>
+        <h1>Anecdote with most votes</h1>
+        <p>{mostVoted.anecdote}</p>
+        <p>has {mostVoted.votes} votes</p>
+      </div>
+    </>
   )
 }
 
