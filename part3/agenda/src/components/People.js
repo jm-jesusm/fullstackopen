@@ -1,6 +1,6 @@
 import React from 'react'
 
-const People = ({people}) => {
+const People = ({people, filter}) => {
 
 	const filteredPeople = people.filter(({name}) => !filter || name.match(new RegExp(filter, 'i')))
 

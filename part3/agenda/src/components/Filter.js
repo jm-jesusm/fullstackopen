@@ -6,7 +6,7 @@ const Filter = ({setFilter}) => {
 
   return (
     <div>
-      filter shown with: <input onChange={handleChange} name=''/>
+      filter shown with: <input onChange={handleChange} name='filter'/>
     </div>
   )
 }

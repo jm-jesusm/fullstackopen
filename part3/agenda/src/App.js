@@ -23,7 +23,7 @@ const App = () => {
       
       <h2>Numbers</h2>
       
-      <People people={people} />
+      <People people={people} filter={filter} />
     </div>
   )
 }
