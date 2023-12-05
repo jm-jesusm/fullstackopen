@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 
 const PersonForm = ({people, setPeople}) => {
@@ -10,7 +11,14 @@ const PersonForm = ({people, setPeople}) => {
     if(people.some(person => person.name === newName))
       return alert(`${newName} is already added to phonebook`)
 
-    setPeople((prevPeople) => [...prevPeople, {name : newName, phone: newNumber}])
+    const newPerson = {name : newName, number: newNumber}
+
+    axios
+      .post('http://localhost:3001/people', newPerson)
+      .then(res => {
+        setPeople((prevPeople) => [...prevPeople, res.data])
+      })
+    
   }
 
   const handleChange = (setFunction) => ({target}) => setFunction(target.value)
