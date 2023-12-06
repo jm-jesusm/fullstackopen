@@ -27,7 +27,7 @@ const App = () => {
       
       <h2>Numbers</h2>
       
-      <People people={people} filter={filter} />
+      <People people={people} filter={filter} setPeople={setPeople} />
     </div>
   )
 }
