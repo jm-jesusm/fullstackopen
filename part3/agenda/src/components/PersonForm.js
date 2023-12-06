@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import peopleService from '../services/people'
+import NOTIFICACION_CODE_ENUM from '../notificationEnum'
 
-const PersonForm = ({people, setPeople}) => {
+const PersonForm = ({people, setPeople, setNotification}) => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
 
@@ -18,7 +19,10 @@ const PersonForm = ({people, setPeople}) => {
         .update({...foundPerson, number: newNumber})
         .then(person => {
           setPeople((prevPeople) => prevPeople.map(prevPerson => prevPerson.id === person.id ? person : prevPerson))
+          setNotification({code: NOTIFICACION_CODE_ENUM.CORRECT, message: `Changed ${foundPerson.name}`})
         })
+        .catch(() => setNotification({code: NOTIFICACION_CODE_ENUM.ERROR, message: `Information of ${foundPerson.name} couldn't be changed, try again later`}))
+        .finally(() => setTimeout(() => setNotification({code: NOTIFICACION_CODE_ENUM.NONE, message: ''}), 3000))
     }
 
     const newPerson = {name : newName, number: newNumber}
@@ -27,8 +31,10 @@ const PersonForm = ({people, setPeople}) => {
       .create(newPerson)
       .then(person => {
         setPeople((prevPeople) => [...prevPeople, person])
+        setNotification({code: NOTIFICACION_CODE_ENUM.CORRECT, message: `Added ${newPerson.name}`})
       })
-    
+      .catch(() => setNotification({code: NOTIFICACION_CODE_ENUM.ERROR, message: `Information of ${newPerson.name} couldn't be saved, try again later`}))
+      .finally(() => setTimeout(() => setNotification({code: NOTIFICACION_CODE_ENUM.NONE, message: ''}), 3000))
   }
 
   const handleChange = (setFunction) => ({target}) => setFunction(target.value)

@@ -1,0 +1,7 @@
+const NOTIFICACION_CODE_ENUM = {
+  NONE: 0,
+  CORRECT: 1,
+  ERROR: 2 
+}
+
+export default NOTIFICACION_CODE_ENUM
