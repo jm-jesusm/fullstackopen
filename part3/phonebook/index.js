@@ -1,9 +1,12 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+morgan.token('body', function (req, _res) { return JSON.stringify(req.body) })
 
 app.use(express.json())
-app.use(morgan('tiny'))
+app.use(morgan('tiny', {
+  skip: (req) => req.method === 'POST'
+}))
 
 let phonebook = [
   {
@@ -39,6 +42,8 @@ app.get('/api/persons/:id', (request, response) => {
   if(!person) return response.status(404).end()
   response.json(person)
 })
+
+app.post('*', morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.post('/api/persons/', (request, response) => {
   const id = Math.floor(Math.random()*10000)
