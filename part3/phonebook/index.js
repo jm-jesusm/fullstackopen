@@ -26,13 +26,16 @@ let phonebook = [
   }
 ]
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (_request, response) => {
   response.json(phonebook)
 })
 
 
-app.get('/info', (request, response) => {
-  response.json(notes)
+app.get('/info', (_request, response) => {
+  response.send(`
+    <p>Phonebook has info for ${phonebook.length} people</p>
+    <p>${new Date()}</p>
+  `)
 })
 
 const PORT = 3001
