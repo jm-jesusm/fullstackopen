@@ -6,6 +6,7 @@ morgan.token('body', function (req, _res) { return JSON.stringify(req.body) })
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 app.use(morgan('tiny', {
   skip: (req) => req.method === 'POST'
 }))
