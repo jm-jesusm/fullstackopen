@@ -41,6 +41,13 @@ app.post('/api/persons/', (request, response) => {
   const id = Math.floor(Math.random()*10000)
 
   const person = request.body
+  if(!person.name && !person.number) return response.status(204).json({ error: 'name and number are required' })
+  if(!person.name) return response.status(206).json({ error: 'name is required' })
+  if(!person.number) return response.status(206).json({ error: 'number is required' })
+  
+  const isRegistered = phonebook.some(({name}) => name === person.name)
+  if(isRegistered) return response.status(302).json({ error: 'name must be unique' })
+
   person.id = id
 
   phonebook = phonebook.concat(person)
