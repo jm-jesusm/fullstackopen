@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+require('dotenv').config()
 const morgan = require('morgan')
 const cors = require('cors')
 morgan.token('body', function (req, _res) { return JSON.stringify(req.body) })
@@ -10,6 +11,8 @@ app.use(express.static('build'))
 app.use(morgan('tiny', {
   skip: (req) => req.method === 'POST'
 }))
+
+const Person = require('./models/person')
 
 let phonebook = [
   {
@@ -36,14 +39,17 @@ let phonebook = [
 ]
 
 app.get('/api/persons', (_request, response) => {
-  response.json(phonebook)
+  Person.find({})
+    .then(res => {
+      response.json(res)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = phonebook.find(person => person.id === id)
-  if(!person) return response.status(404).end()
-  response.json(person)
+  Person.findById(request.params.id)
+    .then(person => {
+      response.json(person)
+    })
 })
 
 app.post('*', morgan(':method :url :status :res[content-length] - :response-time ms :body'))
