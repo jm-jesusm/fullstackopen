@@ -55,20 +55,17 @@ app.get('/api/persons/:id', (request, response) => {
 app.post('*', morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.post('/api/persons/', (request, response) => {
-  const id = Math.floor(Math.random()*10000)
 
-  const person = request.body
-  if(!person.name && !person.number) return response.status(204).json({ error: 'name and number are required' })
-  if(!person.name) return response.status(206).json({ error: 'name is required' })
-  if(!person.number) return response.status(206).json({ error: 'number is required' })
+  const {name, number} = request.body
+  if(!name && !number) return response.status(204).json({ error: 'name and number are required' })
+  if(!name) return response.status(206).json({ error: 'name is required' })
+  if(!number) return response.status(206).json({ error: 'number is required' })
   
-  const isRegistered = phonebook.some(({name}) => name === person.name)
-  if(isRegistered) return response.status(302).json({ error: 'name must be unique' })
-
-  person.id = id
-
-  phonebook = phonebook.concat(person)
-  response.json(person)
+  const person = new Person({name, number})
+  person.save()
+    .then(res => {
+      response.status(201).json(res)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -79,10 +76,14 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.get('/info', (_request, response) => {
-  response.send(`
-    <p>Phonebook has info for ${phonebook.length} people</p>
-    <p>${new Date()}</p>
-  `)
+  Person.find({})
+    .then(res => {
+      response.send(`
+        <p>Phonebook has info for ${res.length} people</p>
+        <p>${new Date()}</p>
+      `)
+    })
+  
 })
 
 const PORT = process.env.PORT || 3001
