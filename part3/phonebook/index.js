@@ -55,6 +55,15 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(err => next(err))
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const person = request.body
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+
 app.get('/info', (_request, response) => {
   Person.find({})
     .then(res => {
@@ -74,7 +83,6 @@ const errorHandler = (error, _request, response, next) => {
 }
 
 app.use(errorHandler)
-
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
