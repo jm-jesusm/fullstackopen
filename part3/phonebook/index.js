@@ -35,9 +35,6 @@ app.post('*', morgan(':method :url :status :res[content-length] - :response-time
 app.post('/api/persons/', (request, response, next) => {
 
   const {name, number} = request.body
-  if(!name && !number) return response.status(204).json({ error: 'name and number are required' })
-  if(!name) return response.status(206).json({ error: 'name is required' })
-  if(!number) return response.status(206).json({ error: 'number is required' })
   
   const person = new Person({name, number})
   person.save()
@@ -78,7 +75,8 @@ app.get('/info', (_request, response) => {
 const errorHandler = (error, _request, response, next) => {
   switch(error.name) {
     case 'CastError': return response.status(400).json({ error: 'malformatted id' })
-    default: return response.status(400).json({ error })
+    case 'ValidationError': return response.status(400).json({ error: error.message })
+    default: return response.status(400).json({ error: error.message })
   }
 }
 
