@@ -65,10 +65,10 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/info', (_request, response) => {
-  Person.find({})
+  Person.countDocuments({})
     .then(res => {
       response.send(`
-        <p>Phonebook has info for ${res.length} people</p>
+        <p>Phonebook has info for ${res} people</p>
         <p>${new Date()}</p>
       `)
     })
