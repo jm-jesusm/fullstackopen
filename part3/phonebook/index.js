@@ -14,23 +14,25 @@ app.use(morgan('tiny', {
 
 const Person = require('./models/person')
 
-app.get('/api/persons', (_request, response) => {
+app.get('/api/persons', (_request, response, next) => {
   Person.find({})
     .then(res => {
       response.json(res)
     })
+    .catch(err => next(err))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
       response.json(person)
     })
+    .catch(err => next(err))
 })
 
 app.post('*', morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-app.post('/api/persons/', (request, response) => {
+app.post('/api/persons/', (request, response, next) => {
 
   const {name, number} = request.body
   if(!name && !number) return response.status(204).json({ error: 'name and number are required' })
@@ -42,14 +44,15 @@ app.post('/api/persons/', (request, response) => {
     .then(res => {
       response.status(201).json(res)
     })
+    .catch(err => next(err))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(_res => {
       response.status(204).end()
     })
-
+    .catch(err => next(err))
 })
 
 app.get('/info', (_request, response) => {
@@ -62,6 +65,16 @@ app.get('/info', (_request, response) => {
     })
   
 })
+
+const errorHandler = (error, _request, response, next) => {
+  switch(error.name) {
+    case 'CastError': return response.status(400).json({ error: 'malformatted id' })
+    default: return response.status(400).json({ error })
+  }
+}
+
+app.use(errorHandler)
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
