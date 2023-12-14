@@ -22,8 +22,8 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-switch(process.argv.length) {
-  case 3: 
+switch (process.argv.length) {
+  case 3: {
     const people = Person.find({})
     console.log('phonebook: ')
     people.then(res => {
@@ -31,7 +31,8 @@ switch(process.argv.length) {
       mongoose.connection.close()
     })
     break
-  case 5:
+  }
+  case 5: {
     const [name, number] = process.argv.slice(3)
     const person = new Person({
       name,
@@ -42,8 +43,10 @@ switch(process.argv.length) {
       mongoose.connection.close()
     })
     break
-  default: 
+  }
+  default: {
     console.log(console.log('Wrong number of arguments, follow this template: \nnode mongo.js <password> \nor \nnode mongo.js <password> <name> <number>'))
     mongoose.connection.close()
     break
+  }
 }

@@ -33,10 +33,8 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.post('*', morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.post('/api/persons/', (request, response, next) => {
-
-  const {name, number} = request.body
-  
-  const person = new Person({name, number})
+  const { name, number } = request.body
+  const person = new Person({ name, number })
   person.save()
     .then(res => {
       response.status(201).json(res)
@@ -69,11 +67,10 @@ app.get('/info', (_request, response) => {
         <p>${new Date()}</p>
       `)
     })
-  
 })
 
 const errorHandler = (error, _request, response, next) => {
-  switch(error.name) {
+  switch (error.name) {
     case 'CastError': return response.status(400).json({ error: 'malformatted id' })
     case 'ValidationError': return response.status(400).json({ error: error.message })
     default: return response.status(400).json({ error: error.message })
